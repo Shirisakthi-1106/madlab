@@ -1,0 +1,136 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(NotesApp());
+}
+
+class NotesApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(debugShowCheckedModeBanner: false, home: NotesScreen());
+  }
+}
+
+class NotesScreen extends StatefulWidget {
+  @override
+  _NotesScreenState createState() => _NotesScreenState();
+}
+
+class _NotesScreenState extends State<NotesScreen> {
+  List<String> notes = [];
+
+  void addOrEditNote({String? oldNote, int? index}) async {
+    TextEditingController controller = TextEditingController(
+      text: oldNote ?? "",
+    );
+
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(oldNote == null ? "Add Note" : "Edit Note"),
+          content: TextField(
+            controller: controller,
+            maxLines: 5,
+            decoration: InputDecoration(
+              hintText: "Write your note...",
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (controller.text.isNotEmpty) {
+                  Navigator.pop(context, controller.text);
+                }
+              },
+              child: Text("Save"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result != null) {
+      setState(() {
+        if (index != null) {
+          notes[index] = result; // ✅ UPDATE
+        } else {
+          notes.add(result); // ADD
+        }
+      });
+    }
+  }
+
+  void deleteNote(int index) {
+    setState(() {
+      notes.removeAt(index);
+    });
+  }
+
+  void viewNote(String note) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Note"),
+        content: SingleChildScrollView(child: Text(note)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Close"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Notes App")),
+      body: notes.isEmpty
+          ? Center(child: Text("No notes available"))
+          : ListView.builder(
+              itemCount: notes.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(
+                      notes[index],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    onTap: () => viewNote(notes[index]), // 👀 VIEW
+
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit, color: Colors.blue),
+                          onPressed: () => addOrEditNote(
+                            oldNote: notes[index],
+                            index: index,
+                          ), // ✏️ UPDATE
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => deleteNote(index), // 🗑️ DELETE
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => addOrEditNote(), // ➕ ADD
+      ),
+    );
+  }
+}
