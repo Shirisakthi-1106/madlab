@@ -1,0 +1,146 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Portfolio',
+      home: PortfolioPage(),
+    );
+  }
+}
+
+class PortfolioPage extends StatelessWidget {
+  final List<String> skills = [
+    "Flutter",
+    "Dart",
+    "Python",
+    "Machine Learning",
+    "HTML",
+    "CSS",
+    "JavaScript"
+  ];
+
+  final List<Map<String, String>> projects = [
+    {
+      "title": "SkillArc",
+      "desc": "Skill mapping & certification tracking system"
+    },
+    {
+      "title": "AI Proctoring System",
+      "desc": "Detects malpractice using ML"
+    },
+    {
+      "title": "Smart Waste Segregation",
+      "desc": "Classifies waste using sensors and camera"
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("My Portfolio"),
+        centerTitle: true,
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+
+          // 👤 PROFILE
+          Center(
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(
+                    "https://i.pravatar.cc/150?img=3",
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Shiri Sakthi",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "IT Student | Developer",
+                  style: TextStyle(color: Colors.grey),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Passionate about building real-world projects using Flutter and AI.",
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+
+          SizedBox(height: 30),
+
+          // 🛠 SKILLS
+          Text(
+            "Skills",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10),
+
+          Wrap(
+            spacing: 10,
+            children: skills.map((skill) {
+              return Chip(
+                label: Text(skill),
+                backgroundColor: Colors.blue.shade100,
+              );
+            }).toList(),
+          ),
+
+          SizedBox(height: 30),
+
+          // 📂 PROJECTS
+          Text(
+            "Projects",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10),
+
+          Column(
+            children: projects.map((project) {
+              return Card(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                elevation: 3,
+                child: ListTile(
+                  title: Text(project["title"]!),
+                  subtitle: Text(project["desc"]!),
+                  leading: Icon(Icons.folder),
+                ),
+              );
+            }).toList(),
+          ),
+
+          SizedBox(height: 30),
+
+          // 📞 CONTACT
+          Text(
+            "Contact",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10),
+
+          ListTile(
+            leading: Icon(Icons.email),
+            title: Text("shiri@email.com"),
+          ),
+          ListTile(
+            leading: Icon(Icons.phone),
+            title: Text("+91 9876543210"),
+          ),
+        ],
+      ),
+    );
+  }
+}
