@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Todo App")),
+      appBar: AppBar(title: Text("Color Match")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

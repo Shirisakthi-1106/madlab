@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Todo App")),
+      appBar: AppBar(title: Text("Mood Tracker")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
